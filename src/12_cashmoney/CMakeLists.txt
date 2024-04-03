@@ -68,7 +68,7 @@ add_executable(uiaos-kernel
 	src/monitor/monitor.c
 	src/interrupt/int.asm
 	src/interrupt/irq.asm
-	src/interrupt/isr.c
+	src/interrupt/interrupt.c
 	src/timer/timer.c
 )
 

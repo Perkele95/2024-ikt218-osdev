@@ -1,5 +1,5 @@
 #include "timer.h"
-#include "../interrupt/isr.h"
+#include "../interrupt/interrupt.h"
 #include "../monitor/monitor.h"
 
 #define TIMER_FREQUENCY 1193180

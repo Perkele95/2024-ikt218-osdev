@@ -1,4 +1,4 @@
-#include "isr.h"
+#include "interrupt.h"
 #include <libc/string.h>
 #include "../monitor/monitor.h"
 
@@ -11,7 +11,7 @@ void set_interrupt_handler(size_t n, isr_t fn)
     interrupt_handlers[n] = fn;
 }
 
-const char *get_interrupt_string(uint32_t interrupt)
+static const char *get_interrupt_string(uint32_t interrupt)
 {
     static const char *s_InterruptString[] =
     {
@@ -46,9 +46,16 @@ const char *get_interrupt_string(uint32_t interrupt)
 
 void isr_handler(registers_t regs)
 {
-    monitor_write("Interrupt: ");
-    monitor_write(get_interrupt_string(regs.int_no));
-    monitor_put('\n');
+    if(interrupt_handlers[regs.int_no])
+    {
+        interrupt_handlers[regs.int_no](regs);
+    }
+    else
+    {
+        monitor_write("Interrupt: ");
+        monitor_write(get_interrupt_string(regs.int_no));
+        monitor_put('\n');
+    }
 }
 
 // Receives incoming interrupts and forwards the call
