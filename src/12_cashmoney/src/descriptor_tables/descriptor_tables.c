@@ -53,7 +53,7 @@ static void idt_set(uint8_t index, uint32_t base, uint16_t sel, uint8_t flags, i
     idt_entries[index].flags = mode == KERNEL_MODE ? flags : flags | 0x60;
 }
 
-static void remap_irq_table()
+static void remap_pic()
 {
     outbyte(PIC1, ICW1_INIT | ICW1_ICW4);
     outbyte(PIC2, ICW1_INIT | ICW1_ICW4);
@@ -74,7 +74,7 @@ static void init_idt()
 
     memset(&idt_entries, 0, sizeof(idt_entries));
 
-    remap_irq_table();
+    remap_pic();
 
     // ISRs
     idt_set(0, (uint32_t)isr0, 0x08, 0x8E, KERNEL_MODE);
@@ -122,4 +122,5 @@ void init_descriptor_tables()
 {
     init_gdt();
     init_idt();
+    asm volatile("sti"); // set interrupt flag
 }
