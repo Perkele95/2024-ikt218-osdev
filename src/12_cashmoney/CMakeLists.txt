@@ -66,6 +66,9 @@ add_executable(uiaos-kernel
 	src/descriptor_tables/descriptor_tables.c
 	src/descriptor_tables/gdt_flush.asm
 	src/descriptor_tables/idt_flush.asm
+	src/interrupt/int.asm
+	src/interrupt/irq.asm
+	src/interrupt/isr.c
 )
 
 # Include directories for the kernel target

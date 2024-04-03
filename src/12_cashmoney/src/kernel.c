@@ -20,6 +20,10 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr)
 
     monitor_write("Hello, world!\n");
 
+    asm volatile ("int $0x3");
+    asm volatile ("int $0x1");
+    asm volatile ("int $0x2");
+
     // Call cpp kernel_main (defined in kernel.cpp)
     return kernel_main();
 }
