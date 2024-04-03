@@ -1,6 +1,6 @@
 #include "isr.h"
-#include <libc/stdio.h>
 #include <libc/string.h>
+#include "../monitor/monitor.h"
 
 #define IRQ_RESET_SIGNAL 0x20
 

@@ -2,10 +2,10 @@
 #include <libc/stddef.h>
 #include <libc/stdbool.h>
 #include <multiboot2.h>
-#include <libc/stdio.h>
 #include "descriptor_tables/descriptor_tables.h"
-#include "timer/timer.h"
+#include "monitor/monitor.h"
 #include "interrupt/isr.h"
+#include "timer/timer.h"
 
 struct multiboot_info
 {
