@@ -69,7 +69,7 @@ add_executable(uiaos-kernel
 	src/interrupt/int.asm
 	src/interrupt/irq.asm
 	src/interrupt/interrupt.c
-	src/timer/timer.c
+	src/input/input.c
 )
 
 # Include directories for the kernel target

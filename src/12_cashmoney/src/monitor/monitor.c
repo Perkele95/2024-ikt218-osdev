@@ -59,15 +59,28 @@ static void monitor_scroll_down()
 void monitor_put(char c)
 {
     const uint8_t attributeByte = get_attribute_byte(VIDEO_SCREEN_BG, VIDEO_SCREEN_FG);
+    const uint16_t blank = 0x20 /* space */ | (attributeByte << 8);
     // The attribute byte is the top 8 bits of the word we have to send to the
     // VGA board.
     const uint16_t attribute = attributeByte << 8;
     uint16_t *location;
 
     // Handle a backspace, by moving the cursor back one space
-    if (c == 0x08 && Cursor_x)
+    if (c == 0x08)
     {
-        Cursor_x--;
+        // Add empty character
+        location = Video + (Cursor_y * VIDEO_SCREEN_WIDTH + Cursor_x) - 1;
+        *location = blank;
+
+        if(Cursor_x == 0 && Cursor_y > 0)
+        {
+            Cursor_y--;
+            Cursor_x = VIDEO_SCREEN_WIDTH - 1;
+        }
+        else if(Cursor_x)
+        {
+            Cursor_x--;
+        }
     }
 
     // Handle a tab by increasing the cursor's X, but only to a point

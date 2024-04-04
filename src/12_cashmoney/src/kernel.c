@@ -5,7 +5,7 @@
 #include "descriptor_tables/descriptor_tables.h"
 #include "monitor/monitor.h"
 #include "interrupt/interrupt.h"
-#include "timer/timer.h"
+#include "input/input.h"
 
 struct multiboot_info
 {
@@ -19,12 +19,7 @@ int kernel_main();
 int main(uint32_t magic, struct multiboot_info* mb_info_addr)
 {
     init_descriptor_tables();
-
-    //asm volatile("int $0x00");
-    //asm volatile("int $0x01");
-    asm volatile("int $0x02");
-
-    //monitor_write("Hello, world!\n");
+    init_keyboard_input();
 
     // Call cpp kernel_main (defined in kernel.cpp)
     return kernel_main();

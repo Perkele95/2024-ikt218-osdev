@@ -18,11 +18,6 @@
 #define ICW4_BUF_MASTER	0x0C		/* Buffered mode/master */
 #define ICW4_SFNM	0x10		/* Special fully nested (not) */
 
-#define PIT_CH0 0x40
-#define PIT_CH1 0x41
-#define PIT_CH2 0x42
-#define PIT_COMMAND 0x43
-
 #define GDT_ENTRY_COUNT 5
 #define IDT_ENTRY_COUNT 256
 
