@@ -7,6 +7,8 @@
 #include "interrupt/interrupt.h"
 #include "input/input.h"
 
+extern uint32_t end; // This is defined in arch/i386/linker.ld
+
 struct multiboot_info
 {
     uint32_t size;
@@ -20,7 +22,12 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr)
 {
     init_descriptor_tables();
     init_keyboard_input();
-
+#if 0
+    init_kernel_memory(&end);
+    init_paging();
+    print_memory_layout();
+    init_pit();
+#endif
     // Call cpp kernel_main (defined in kernel.cpp)
     return kernel_main();
 }

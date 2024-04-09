@@ -70,6 +70,7 @@ add_executable(uiaos-kernel
 	src/interrupt/irq.asm
 	src/interrupt/interrupt.c
 	src/input/input.c
+	src/memory/kmalloc.c
 )
 
 # Include directories for the kernel target
