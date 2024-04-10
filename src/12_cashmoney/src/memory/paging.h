@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common.h"
+#include "kmalloc.h"
 
 #define PAGE_TABLE_SIZE 1024
 

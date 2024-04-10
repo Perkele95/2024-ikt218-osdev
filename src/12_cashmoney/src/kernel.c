@@ -23,9 +23,9 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr)
 {
     init_descriptor_tables();
     init_keyboard_input();
+    init_kernel_memory(&end);
     init_paging();
 #if 0
-    init_kernel_memory(&end);
     print_memory_layout();
     init_pit();
 #endif

@@ -9,6 +9,7 @@ enum SCANCODE_CONTROL
 {
     SCANCODE_CONTROL_LCTRL = 0x2A,
     SCANCODE_CONTROL_RCTRL = 0x36,
+    SCANCODE_TAB = 0x3A,
 };
 
 unsigned char kbdus[128] =
@@ -52,21 +53,30 @@ unsigned char kbdus[128] =
 };
 
 static bool ShiftActive = false;
+static bool CapsLockActive = false;
 
-void handle_key_press(uint8_t scancode)
+void handle_key(uint8_t scancode, bool press)
 {
-    if(scancode == SCANCODE_CONTROL_LCTRL || scancode == SCANCODE_CONTROL_RCTRL)
-        ShiftActive = true;
-    else if(ShiftActive)
-        monitor_put(kbdus[scancode] - (char)32);
-    else
-        monitor_put(kbdus[scancode]);
-}
-
-void handle_key_release(uint8_t scancode)
-{
-    if(scancode == SCANCODE_CONTROL_LCTRL || scancode == SCANCODE_CONTROL_RCTRL)
-        ShiftActive = false;
+    switch (scancode)
+    {
+        case SCANCODE_CONTROL_LCTRL:
+        case SCANCODE_CONTROL_RCTRL:
+            ShiftActive = press;
+            break;
+        case SCANCODE_TAB:
+            if(press)
+                CapsLockActive = ~CapsLockActive;
+            break;
+        default:
+            if(press)
+            {
+                if(ShiftActive || CapsLockActive)
+                    monitor_put(kbdus[scancode] - (char)32);
+                else
+                    monitor_put(kbdus[scancode]);
+            }
+            break;
+    }
 }
 
 void keyboard_callback(registers_t regs)
@@ -77,12 +87,12 @@ void keyboard_callback(registers_t regs)
     {
         // Release :: truncate to exclude release bit
         const uint8_t scan = scancode & (SCANCODE_KEY_RELEASE_BIT - 1);
-        handle_key_release(scan);
+        handle_key(scan, false);
     }
     else
     {
         // Press
-        handle_key_press(scancode);
+        handle_key(scancode, true);
     }
 }
 

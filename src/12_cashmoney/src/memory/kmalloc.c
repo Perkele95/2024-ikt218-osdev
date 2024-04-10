@@ -1,27 +1,27 @@
 #include "kmalloc.h"
 #include <libc/stdbool.h>
 
-uint32_t PlacementAddress = 0;
+uint32_t placement_address = 0;
 
 void init_kernel_memory(uint32_t *pEnd)
 {
-    PlacementAddress = *pEnd;
+    placement_address = *pEnd;
 }
 
 static uint32_t kmalloc_internal(uint32_t size, bool align, uint32_t *phys)
 {
     // Align memory to a page
-    if (align && (PlacementAddress & 0xFFFFF000))
+    if (align && (placement_address & 0xFFFFF000))
     {
-        PlacementAddress &= 0xFFFFF000;
-        PlacementAddress += 0x1000;
+        placement_address &= 0xFFFFF000;
+        placement_address += 0x1000;
     }
 
     if(phys)
-        *phys = PlacementAddress;
+        *phys = placement_address;
 
-    const uint32_t tmp = PlacementAddress;
-    PlacementAddress += size;
+    const uint32_t tmp = placement_address;
+    placement_address += size;
     return tmp;
 }
 
