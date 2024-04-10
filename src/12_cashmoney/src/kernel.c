@@ -6,6 +6,7 @@
 #include "monitor/monitor.h"
 #include "interrupt/interrupt.h"
 #include "input/input.h"
+#include "memory/paging.h"
 
 extern uint32_t end; // This is defined in arch/i386/linker.ld
 
@@ -22,9 +23,9 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr)
 {
     init_descriptor_tables();
     init_keyboard_input();
+    init_paging();
 #if 0
     init_kernel_memory(&end);
-    init_paging();
     print_memory_layout();
     init_pit();
 #endif

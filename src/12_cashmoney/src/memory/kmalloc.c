@@ -3,6 +3,11 @@
 
 uint32_t PlacementAddress = 0;
 
+void init_kernel_memory(uint32_t *pEnd)
+{
+    PlacementAddress = *pEnd;
+}
+
 static uint32_t kmalloc_internal(uint32_t size, bool align, uint32_t *phys)
 {
     // Align memory to a page

@@ -71,6 +71,7 @@ add_executable(uiaos-kernel
 	src/interrupt/interrupt.c
 	src/input/input.c
 	src/memory/kmalloc.c
+	src/memory/paging.c
 )
 
 # Include directories for the kernel target

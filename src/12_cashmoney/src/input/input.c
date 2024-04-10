@@ -5,6 +5,12 @@
 #define PS2_DATA 0x60
 #define SCANCODE_KEY_RELEASE_BIT 0x80
 
+enum SCANCODE_CONTROL
+{
+    SCANCODE_CONTROL_LCTRL = 0x2A,
+    SCANCODE_CONTROL_RCTRL = 0x36,
+};
+
 unsigned char kbdus[128] =
 {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8',	/* 9 */
@@ -45,6 +51,24 @@ unsigned char kbdus[128] =
     0,	/* All other keys are undefined */
 };
 
+static bool ShiftActive = false;
+
+void handle_key_press(uint8_t scancode)
+{
+    if(scancode == SCANCODE_CONTROL_LCTRL || scancode == SCANCODE_CONTROL_RCTRL)
+        ShiftActive = true;
+    else if(ShiftActive)
+        monitor_put(kbdus[scancode] - (char)32);
+    else
+        monitor_put(kbdus[scancode]);
+}
+
+void handle_key_release(uint8_t scancode)
+{
+    if(scancode == SCANCODE_CONTROL_LCTRL || scancode == SCANCODE_CONTROL_RCTRL)
+        ShiftActive = false;
+}
+
 void keyboard_callback(registers_t regs)
 {
     const uint8_t scancode = inbyte(PS2_DATA);
@@ -53,13 +77,12 @@ void keyboard_callback(registers_t regs)
     {
         // Release :: truncate to exclude release bit
         const uint8_t scan = scancode & (SCANCODE_KEY_RELEASE_BIT - 1);
-        const uint8_t key = kbdus[scan];
+        handle_key_release(scan);
     }
     else
     {
         // Press
-        const uint8_t key = kbdus[scancode];
-        monitor_put(key);
+        handle_key_press(scancode);
     }
 }
 
