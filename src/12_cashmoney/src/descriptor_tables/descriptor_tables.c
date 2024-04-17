@@ -1,5 +1,6 @@
 #include <libc/limits.h>
 #include "descriptor_tables.h"
+#include "../memory/memutils.h"
 
 // Access to ASM functions
 extern void gdt_flush(uint32_t);
@@ -77,43 +78,43 @@ static void init_idt()
     remap_pic();
 
     // ISRs
-    idt_set(0, (uint32_t)isr0, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(1, (uint32_t)isr1, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(2, (uint32_t)isr2, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(3, (uint32_t)isr3, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(4, (uint32_t)isr4, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(5, (uint32_t)isr5, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(6, (uint32_t)isr6, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(7, (uint32_t)isr7, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(8, (uint32_t)isr8, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(9, (uint32_t)isr9, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(10, (uint32_t)isr10, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(11, (uint32_t)isr11, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(12, (uint32_t)isr12, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(13, (uint32_t)isr13, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(14, (uint32_t)isr14, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(15, (uint32_t)isr15, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(16, (uint32_t)isr16, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(17, (uint32_t)isr17, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(18, (uint32_t)isr18, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR0, (uint32_t)isr0, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR1, (uint32_t)isr1, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR2, (uint32_t)isr2, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR3, (uint32_t)isr3, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR4, (uint32_t)isr4, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR5, (uint32_t)isr5, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR6, (uint32_t)isr6, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR7, (uint32_t)isr7, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR8, (uint32_t)isr8, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR9, (uint32_t)isr9, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR10, (uint32_t)isr10, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR11, (uint32_t)isr11, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR12, (uint32_t)isr12, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR13, (uint32_t)isr13, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR14, (uint32_t)isr14, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR15, (uint32_t)isr15, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR16, (uint32_t)isr16, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR17, (uint32_t)isr17, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(ISR18, (uint32_t)isr18, 0x08, 0x8E, KERNEL_MODE);
 
     // IRQs
-    idt_set(32, (uint32_t)irq0, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(33, (uint32_t)irq1, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(34, (uint32_t)irq2, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(35, (uint32_t)irq3, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(36, (uint32_t)irq4, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(37, (uint32_t)irq5, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(38, (uint32_t)irq6, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(39, (uint32_t)irq7, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(40, (uint32_t)irq8, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(41, (uint32_t)irq9, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(42, (uint32_t)irq10, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(43, (uint32_t)irq11, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(44, (uint32_t)irq12, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(45, (uint32_t)irq13, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(46, (uint32_t)irq14, 0x08, 0x8E, KERNEL_MODE);
-    idt_set(47, (uint32_t)irq15, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ0, (uint32_t)irq0, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ1, (uint32_t)irq1, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ2, (uint32_t)irq2, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ3, (uint32_t)irq3, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ4, (uint32_t)irq4, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ5, (uint32_t)irq5, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ6, (uint32_t)irq6, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ7, (uint32_t)irq7, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ8, (uint32_t)irq8, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ9, (uint32_t)irq9, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ10, (uint32_t)irq10, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ11, (uint32_t)irq11, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ12, (uint32_t)irq12, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ13, (uint32_t)irq13, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ14, (uint32_t)irq14, 0x08, 0x8E, KERNEL_MODE);
+    idt_set(IRQ15, (uint32_t)irq15, 0x08, 0x8E, KERNEL_MODE);
 
     idt_flush((uint32_t)&idt_ptr);
 }
