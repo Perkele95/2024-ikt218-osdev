@@ -6,6 +6,9 @@
 #include "monitor/monitor.h"
 #include "interrupt/interrupt.h"
 #include "input/input.h"
+#include "memory/paging.h"
+#include "memory/kmalloc.h"
+#include "memory/memutils.h"
 
 extern uint32_t end; // This is defined in arch/i386/linker.ld
 
@@ -28,10 +31,13 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr)
 {
     init_descriptor_tables();
     init_keyboard_input();
-#if 0
     init_kernel_memory(&end);
     init_paging();
+
+    void *test = kmalloc(1000);
+
     print_memory_layout();
+#if 0
     init_pit();
 #endif
     // Call cpp kernel_main (defined in kernel.cpp)

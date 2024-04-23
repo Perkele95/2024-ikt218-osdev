@@ -1,7 +1,8 @@
 #pragma once
 
-#include <libc/stdint.h>
+#include "../common.h"
 
+void print_memory_layout();
 void *kmalloc(size_t size);
 void *kmalloc_aligned(size_t size);
 void kfree(void *mem);

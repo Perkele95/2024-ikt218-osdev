@@ -15,7 +15,7 @@ typedef struct
     uint32_t page_begin, page_end;
     bool *page_desc;
     uint32_t mem_used;
-}memory_data;
+}memory_data_t;
 
 typedef struct
 {
@@ -23,7 +23,28 @@ typedef struct
     size_t size;
 }alloc_t;
 
-static memory_data Memory = {0};
+static memory_data_t Memory = {0};
+
+void print_memory_layout()
+{
+    monitor_write("Memory used: ");
+    monitor_write_udec(Memory.mem_used);
+    monitor_write(" bytes\nMemoryfree: ");
+    monitor_write_udec(Memory.end - Memory.begin - Memory.mem_used);
+    monitor_write(" bytes\nKernel memory start: ");
+    monitor_write_hex(Memory.begin);
+    monitor_write("\nKernel memory end: ");
+    monitor_write_hex(Memory.end);
+    monitor_write("\nKernel memory size: ");
+    monitor_write_udec(Memory.end - Memory.begin);
+    monitor_write(" bytes\nPaging memory start: ");
+    monitor_write_hex(Memory.page_begin);
+    monitor_write("\nPaging memory end: ");
+    monitor_write_hex(Memory.page_end);
+    monitor_write("\nPaging memory size: ");
+    monitor_write_udec(Memory.page_end - Memory.page_begin);
+    monitor_write("bytes \n");
+}
 
 void print_alloc(alloc_t *alloc)
 {
