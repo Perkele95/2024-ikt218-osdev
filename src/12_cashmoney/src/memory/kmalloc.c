@@ -43,7 +43,7 @@ void print_memory_layout()
     monitor_write_hex(Memory.page_end);
     monitor_write("\nPaging memory size: ");
     monitor_write_udec(Memory.page_end - Memory.page_begin);
-    monitor_write("bytes \n");
+    monitor_write(" bytes \n");
 }
 
 void print_alloc(alloc_t *alloc)

@@ -1,6 +1,7 @@
 #include <libc/stdint.h>
 #include <libc/stddef.h>
 #include <libc/stdbool.h>
+#include <libc/stdio.h>
 #include <multiboot2.h>
 #include "descriptor_tables/descriptor_tables.h"
 #include "monitor/monitor.h"
@@ -21,12 +22,6 @@ struct multiboot_info
 
 int kernel_main();
 
-void page_fault_test()
-{
-    uint32_t *ptr = (uint32_t*)0xA0000000;
-    uint32_t do_page_fault = *ptr;
-}
-
 int main(uint32_t magic, struct multiboot_info* mb_info_addr)
 {
     init_descriptor_tables();
@@ -34,9 +29,8 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr)
     init_kernel_memory(&end);
     init_paging();
 
-    void *test = kmalloc(1000);
-
     print_memory_layout();
+
 #if 0
     init_pit();
 #endif
