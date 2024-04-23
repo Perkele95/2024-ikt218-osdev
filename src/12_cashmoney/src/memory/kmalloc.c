@@ -1,6 +1,7 @@
 #include "kmalloc.h"
 #include <libc/stdbool.h>
 #include "memutils.h"
+#include <libc/stdio.h>
 #include "../monitor/monitor.h"
 
 #define MEM_PAGE_SIZE 0x1000
@@ -27,34 +28,22 @@ static memory_data_t Memory = {0};
 
 void print_memory_layout()
 {
-    monitor_write("Memory used: ");
-    monitor_write_udec(Memory.mem_used);
-    monitor_write(" bytes\nMemoryfree: ");
-    monitor_write_udec(Memory.end - Memory.begin - Memory.mem_used);
-    monitor_write(" bytes\nKernel memory start: ");
-    monitor_write_hex(Memory.begin);
-    monitor_write("\nKernel memory end: ");
-    monitor_write_hex(Memory.end);
-    monitor_write("\nKernel memory size: ");
-    monitor_write_udec(Memory.end - Memory.begin);
-    monitor_write(" bytes\nPaging memory start: ");
-    monitor_write_hex(Memory.page_begin);
-    monitor_write("\nPaging memory end: ");
-    monitor_write_hex(Memory.page_end);
-    monitor_write("\nPaging memory size: ");
-    monitor_write_udec(Memory.page_end - Memory.page_begin);
-    monitor_write(" bytes \n");
+    print_fmt("Memory used: %i bytes\n", Memory.mem_used);
+    print_fmt("Memory free: %i bytes\n", Memory.end - Memory.begin - Memory.mem_used);
+    print_fmt("Kernel memory start: %x\n", Memory.begin);
+    print_fmt("Kernel memory end: %x\n", Memory.end);
+    print_fmt("Kernel memory size: %i\n", Memory.end - Memory.begin);
+    print_fmt("Paging memory start: %x\n", Memory.page_begin);
+    print_fmt("Paging memory end: %x\n", Memory.page_end);
+    print_fmt("Paging memory size: %i\n", Memory.page_end - Memory.page_begin);
 }
 
 void print_alloc(alloc_t *alloc)
 {
-    monitor_write("Allocated ");
-    monitor_write_udec(alloc->size);
-    monitor_write(" bytes from ");
-    monitor_write_hex((uint32_t)(alloc + 1));
-    monitor_write(" to ");
-    monitor_write_hex((uint32_t)((uint8_t*)(alloc + 1) + alloc->size));
-    monitor_put('\n');
+    print_fmt("Allocated %i bytes from %x to %x\n",
+        alloc->size,
+        (uint32_t)(alloc + 1),
+        (uint32_t)((uint8_t*)(alloc + 1) + alloc->size));
 }
 
 void *kmalloc(size_t size)
@@ -120,11 +109,7 @@ void *kmalloc_aligned(size_t size)
         {
             Memory.page_desc[i] = true;
             const uint32_t address = Memory.page_begin + i * MEM_PAGE_SIZE;
-            monitor_write("Align allocated from ");
-            monitor_write_hex(address);
-            monitor_write(" to ");
-            monitor_write_hex(address + MEM_PAGE_SIZE);
-            monitor_put('\n');
+            print_fmt("Align allocated from %x to %x\n", address, address + MEM_PAGE_SIZE);
             return (void*)address;
         }
     }
