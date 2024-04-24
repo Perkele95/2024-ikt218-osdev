@@ -31,7 +31,7 @@ int main(uint32_t magic, struct multiboot_info* mb_info_addr)
     print_memory_layout();
     init_pit();
 
-    sleep_busy(2000);
+    sleep_busy(1000);
 
     return kernel_main();
 }

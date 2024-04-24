@@ -58,6 +58,20 @@
 #define GDT_ENTRY_COUNT 5
 #define IDT_ENTRY_COUNT 256
 
+#define PIT_CH0 0x40
+#define PIT_CH1 0x41
+#define PIT_CH2 0x42
+#define PIT_COMMAND 0x43
+#define PIC_EOI 0x20 /* End-of-interrupt command code */
+
+#define PIT_FREQUENCY 1193180
+#define TARGET_FREQUENCY 1000
+#define PIT_DIVISOR (PIT_FREQUENCY / TARGET_FREQUENCY)
+
+#define PC_SPEAKER_PORT 0x61
+#define PC_SPEAKER_GATE_BIT 1
+#define PC_SPEAKER_DATA_BIT (1 << 1)
+
 #define array_size(array) ((sizeof(array)) / (sizeof(array[0])))
 
 // Write a byte to the specified port

@@ -1,6 +1,12 @@
 extern "C" int kernel_main(void);
 
+extern "C"
+{
 #include <libc/memory.h>
+}
+
+#include "sound/Soundplayer.h"
+#include "sound/songs.h"
 
 void *operator new(size_t size) {
     return malloc(size);
@@ -28,10 +34,19 @@ void operator delete[](void *ptr, size_t size) noexcept {
     free(ptr);
 }
 
+#define GET_MUSIC_STRUCT(song)\
+    {\
+        .notes = song,\
+        .length = array_size(song)\
+    }
+
 int kernel_main()
 {
-    auto test = new char[10];
-    delete[] test;
+    auto soundplayer = new Soundplayer();
+
+    const Sound music = GET_MUSIC_STRUCT(music_4);
+
+    soundplayer->play(music);
 
     while(true){}
     return 0;
